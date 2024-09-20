@@ -1,0 +1,58 @@
+import os
+from kaggle.api.kaggle_api_extended import KaggleApi
+
+# Set up Kaggle API
+api = KaggleApi()
+api.authenticate()
+
+# Download the dataset
+api.dataset_download_file('ankitbansal06/retail-orders', file_name='orders.csv', path='.')
+
+#extract file from zip file
+
+import zipfile
+zib_ref = zipfile.ZipFile('orders.csv.zip')
+zib_ref.extractall()
+zib_ref.close()
+
+#read data from the file and handle null values
+import pandas as pd 
+
+df=pd.read_csv('orders.csv',na_values=['Not Available', 'unknown'])
+df.head(10)
+df['Ship Mode'].unique()
+
+#rename columns names ..make them lower case and replace space with underscore
+
+df.columns = df.columns.str.lower()
+df.columns= df.columns.str.replace(' ','_')
+df.head(5)
+
+#derive new columns discount , sale price and profit
+
+df['discount']=df['list_price']*df['discount_percent']*.01
+df['sales_price']=df['list_price']-df['discount']
+df['profit']=df['sales_price']-df['cost_price']
+df.head(5)
+
+#convert order date from object data type to datetime
+
+df['order_date']= pd.to_datetime(df['order_date'],format='%Y-%m-%d')
+df.head(5)
+
+#drop cost price list price and discount percent columns
+
+df.drop(columns=['discount_percent','cost_price','list_price'],inplace=True)
+df.head(5)
+
+#load the data into sql server using replace option
+import sqlalchemy as sal
+
+engine = sal.create_engine('mssql+pyodbc://DESKTOP-3A03TSH/master?driver=SQL+Server+Native+Client+11.0')
+conn = engine.connect()
+
+
+#load the data into sql server using append option
+
+df.to_sql('df_orders',con = conn, index = False, if_exists = 'append')
+
