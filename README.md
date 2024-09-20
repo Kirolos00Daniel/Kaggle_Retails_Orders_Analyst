@@ -127,6 +127,10 @@ from df_orders
 group by product_id
 order by sales desc
 ```
+![result]![image](https://github.com/user-attachments/assets/11e92af9-1f49-4a28-94c1-e6bb87504509)
+
+)
+
 **Explanation:** Finds the top 10 products generating the highest revenue by summing up the sales prices for each product and ordering them in descending order of sales.
 
 #### Analysis 2: Top 5 Highest Selling Products in Each Region
@@ -146,6 +150,10 @@ from
 ) A
 where rn <= 5
 ```
+![result]![image](https://github.com/user-attachments/assets/0f9f57f7-7514-4e8a-9b27-53483a82b81c)
+
+)
+
 **Explanation:** This query identifies the top 5 highest-selling products in each region by using a window function (`row_number`) to rank products within each region based on sales.
 
 #### Analysis 3: Month-over-Month Sales Growth Comparison (2022 vs. 2023)
@@ -164,6 +172,8 @@ from cte
 group by order_month
 order by order_month
 ```
+![Results]![image](https://github.com/user-attachments/assets/79a8de06-7ff7-4734-886a-7e0ddd151459)
+
 **Explanation:** Compares the sales growth between 2022 and 2023 for each month. It uses a common table expression (CTE) to calculate the monthly sales and then aggregates the data by year and month.
 
 #### Analysis 4: Highest Growth in Profit by Sub-Category in 2023 Compared to 2022
@@ -186,6 +196,8 @@ select top 1 *, (sales_2023 - sales_2022)
 from cte2
 order by (sales_2023 - sales_2022) desc
 ```
+![Results]![image](https://github.com/user-attachments/assets/1e4a66b4-098a-4630-8c1e-d81f25168654)
+
 **Explanation:** Finds the sub-category with the highest growth in sales from 2022 to 2023 by calculating the difference in sales between the two years and ordering the results in descending order.
 
 #### Analysis 5: Highest Sales Month for Each Category
@@ -203,6 +215,8 @@ from (
     from tablee
 )
 ```
+
+
 **Explanation:** Determines which month had the highest sales for each category by partitioning the data by category and using the `row_number` function to rank the months based on sales.
 
 ## Future Enhancements
